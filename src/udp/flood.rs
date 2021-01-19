@@ -1,7 +1,7 @@
 use std::net::UdpSocket;
 use rand::random;
 
-pub fn max_packets(dst: &str, length: u16){		
+pub fn max(dst: &str, length: u16){		
 	loop {
 		let socket = UdpSocket::bind("127.0.0.1:34254").expect("couldn't bind to address");
 		socket.connect(dst).expect("connect function failed");
@@ -10,7 +10,7 @@ pub fn max_packets(dst: &str, length: u16){
 	
 }
 
-pub fn rand_packets(dst: &str, length: u16){
+pub fn rnd(dst: &str, length: u16){	
 	loop {
 		let mut data: Vec<u8> = Vec::with_capacity(length.into());
 		for _ in 0..data.capacity() {
@@ -25,7 +25,7 @@ pub fn rand_packets(dst: &str, length: u16){
 	
 }
 
-pub fn null_packets(dst: &str){		
+pub fn null(dst: &str){		
 	loop {
 		let socket = UdpSocket::bind("127.0.0.1:34254").expect("couldn't bind to address");
 		socket.connect(dst).expect("connect function failed");
